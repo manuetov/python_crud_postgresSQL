@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify, send_file  
-# jsonify => metodo para convertir un diccionario en un objto json
+# jsonify => metodo para convertir un diccionario en un objeto json
 from psycopg2 import connect, extras
 # extras => método para que las consultas las devuelvan
 # en forma de diccionarios en vez de tuplas
 from cryptography.fernet import Fernet
-# importo el metodo fernet del modulo Fernet
+# importo el metodo fernet para cifrar password.
 from dotenv import load_dotenv
 # importo dotenv para las variables de entorno
 from os import environ
@@ -24,7 +24,7 @@ port = environ.get("DB_PORT")
 dbname= environ.get("DB_NAME")
 user = environ.get("DB_USER")
 password = environ.get("DB_PASSWORD")
-# para obtener los valores de las variables de entorno 
+# environ => para obtener los valores de las variables de entorno 
 
 # conexión básica a postgress
 def get_connection():
@@ -48,7 +48,7 @@ def create_user():
    conn = get_connection()
    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
    # propiedad que devuelve un metodo que extrae los datos separados entre
-   # parentesis "clave", valor
+   # parentesis "clave", valor. Formato diccionario
 
    new_user = request.get_json()
    # guardo la respuesta json() del objeto request
@@ -74,15 +74,15 @@ def create_user():
 
    return jsonify(new_created_user)
 
-# http://localhost:5000/api/users/1
+# http://localhost:5000/api/users/id
 @app.delete("/api/users/<id>")
 def delete_user(id):
    conn = get_connection()
    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
 
    cur.execute("DELETE FROM users WHERE id = %s RETURNING * ", (id, ))
-   # ejecuta la consulta y RETURNING el dato que ha eliminado. 
-   # (id, es para indicar que es una tupla) sino se pone , da error
+   # ejecuta la consulta. RETURNING devuelve el dato que ha eliminado. 
+   # (id, ) => es para indicar que es una tupla sino se pone la , da error
    user = cur.fetchone()
    # trae al usuario
 

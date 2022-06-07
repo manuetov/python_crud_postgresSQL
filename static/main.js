@@ -1,12 +1,12 @@
 const userForm = document.querySelector("#userForm")
 
-// variables globales //////////////
+// ********** variables globales ****** //
 let users = []
 let editing = false
 // para el metodo put-edit
 let userId = null
 // para el metodo put-edit
-//  ////////////////////////////////
+//  *********************************** //
 
 window.addEventListener("DOMContentLoaded", async () => {
    // lo primero que se ejecuta cuando la página carga
@@ -30,7 +30,7 @@ userForm.addEventListener("submit", async (e) => {
    // guardo los valores de los inputs del formulario
 
    if (!editing) {
-   // si no se está editando, se esta creando método POST
+   // si no se está editando, se esta creando.///// Método POST ////
       const response = await fetch("/api/users", {
       // fetch enviamos los datos del formulario al backend 
          method: "POST",
@@ -48,10 +48,10 @@ userForm.addEventListener("submit", async (e) => {
       const data = await response.json()
       // covierto la respuesta en json           
       users.unshift(data)   
-      // se guardan en el array al inicio. con push se añade al final
+      // unshift() añade datos al inicio. Push() añade al final
       renderUsers(users) 
       }  else { 
-      // //////////// método PUT /////////////////
+      // //////////////////// método PUT //////////////////////////
          const res = await fetch(`/api/users/${userId}`, {
             method: "PUT",
             headers: {
@@ -64,11 +64,11 @@ userForm.addEventListener("submit", async (e) => {
             })
          })
          const updatedUser = await res.json()
-         // usamos la variable global userId que contiene data.id
+         // Uso la variable global userId que contiene data.id
          console.log("data")
 
          users = users.map(user => user.id === updatedUser.id ? updatedUser : user)
-         // si el user.id es igual al updatedUser significa que hay una coincidencia
+         // si user.id es igual a updatedUser.id significa que hay una coincidencia
          // y se genera un nuevo array con el nuevo usuario o el anterior sino coincide 
          renderUsers(users)
          editing = false
@@ -85,8 +85,8 @@ function renderUsers(users){
 
    users.forEach(user => {
       const userItem = document.createElement("li")
-      // con createElement crea un elemneto html tipo lista en cada iteración,
-      // además al ser un elemento, podremos usar otros tipos de selectores, como: querySelector
+      // con createElement crea un elemneto html tipo <li></li> en cada iteración,
+      // además al crearlo como Element, podremos aplicar otros tipos de selectores, como: querySelector
       userItem.classList = "list-group-item list-group-item-dark my-2"
       userItem.innerHTML = `
          <header class="d-flex justify-content-between align-items-center">
@@ -102,7 +102,7 @@ function renderUsers(users){
       const btnDelete = userItem.querySelector(".btn-delete")
       // selecciono el boton por us clase .btn-delete
       btnDelete.addEventListener("click", async () => {
-         // evento de escucha click al botón
+         // evento de escucha "click" botón Delete
          // console.log(user.id)
          const res = await fetch(`/api/users/${user.id}`, {
             method: "DELETE"
@@ -110,9 +110,9 @@ function renderUsers(users){
          const data = await res.json()
          
          users = users.filter(user => user.id !== data.id)
-         // con filter quita del array el usuario eliminado
+         // con filter elimino/filtro del array el usuario eliminado
          renderUsers(users)
-         // renderiza nuevamente con array sin el usuario eliminado
+         // renderiza nuevamente pasandolo [users] sin el usuario eliminado
       })
 
       userList.appendChild(userItem)
